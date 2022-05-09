@@ -28,8 +28,10 @@
     "lib": ["es2015", "es5", "dom"],
     "moduleResolution": "node",
     "noEmitOnError": true,
-    "preserveSymlinks": true,
     "preserveWatchOutput": true,
     "pretty": false,
+    "paths": {
+      "*": ["src/*"]
+    }
   }
 }

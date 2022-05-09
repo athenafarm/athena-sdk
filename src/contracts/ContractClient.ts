@@ -1,12 +1,4 @@
-import {
-  AccAddress,
-  Coins,
-  Key,
-  LCDClient,
-  MsgExecuteContract,
-  Wallet,
-  MsgInstantiateContract,
-} from '@terra-money/terra.js'
+import { AccAddress, Coins, Key, LCDClient, MsgExecuteContract, MsgInstantiateContract } from '@terra-money/terra.js'
 import { EmptyKey } from '../utils/EmptyKey'
 
 export class ContractClient {
@@ -33,20 +25,16 @@ export class ContractClient {
     this.key = options.key ? options.key : new EmptyKey()
   }
 
-  public get wallet(): Wallet {
-    if (this.lcd === undefined) {
-      throw new Error('LCDClient not provided - unable to create wallet')
-    }
-
-    return this.lcd.wallet(this.key)
-  }
-
   protected async query<T>(queryMmsg: any): Promise<T> {
     if (!this.contractAddress) {
       throw new Error('contractAddress not provided - unable to query')
     }
 
-    return this.wallet.lcd.wasm.contractQuery<T>(this.contractAddress, queryMmsg)
+    if (!this.lcd) {
+      throw new Error('LCDClient not provided')
+    }
+
+    return this.lcd.wasm.contractQuery<T>(this.contractAddress, queryMmsg)
   }
 
   protected createExecuteMsg(executeMsg: any, coins: Coins.Input = {}): MsgExecuteContract {
