@@ -1,7 +1,7 @@
 import { AccAddress, Dec, MsgExecuteContract, MsgInstantiateContract } from '@terra-money/terra.js'
 import { ContractClient } from './ContractClient'
 
-export interface InitMsg {
+interface InitMsg {
   contract_addr: AccAddress // Strategy contract address.
   controller: AccAddress // Controller address.
   vault: AccAddress // Vault address.
@@ -16,14 +16,14 @@ export interface InitMsg {
   terraswap_factory: AccAddress // Terraswap factory address.
 }
 
-export type UpdateConfig = Omit<InitMsg, 'contract_addr'>
-
-export type ConfigResponse = InitMsg
-
-export interface StateResponse {
+interface StateResponse {
   anchor_deposited: string
   aterra_collateral: string
 }
+
+type UpdateConfig = Omit<InitMsg, 'contract_addr'>
+
+type ConfigResponse = InitMsg
 
 export class AthenaVaultStrategy extends ContractClient {
   public init(init_msg: InitMsg): MsgInstantiateContract {
@@ -31,7 +31,7 @@ export class AthenaVaultStrategy extends ContractClient {
   }
 
   /**
-   * Update configuration of vault.
+   * Update configuration of strategy.
    * @param {UpdateConfig} config
    * @returns {MsgExecuteContract}
    */
@@ -190,7 +190,7 @@ export class AthenaVaultStrategy extends ContractClient {
    * @async
    * @returns {ConfigResponse}
    */
-  public async getConfig(): Promise<ConfigResponse> {
+  public async config(): Promise<ConfigResponse> {
     return this.query({
       config: {},
     })
